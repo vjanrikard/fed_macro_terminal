@@ -4,18 +4,21 @@ const path = require("path");
 const FED_BASE = "https://api.stlouisfed.org/fred/series/observations";
 const LIMIT = "240";
 const SERIES_IDS = [
-  "PCEPI",
-  "PCEPILFE",
-  "CPIAUCSL",
-  "UNRATE",
-  "PAYEMS",
-  "GDPC1",
-  "INDPRO",
-  "RSAFS",
-  "HOUST",
+  // Inflation
+  "PCEPI", "PCEPILFE", "CPIAUCSL", "CPILFESL",
+  // Labor
+  "UNRATE", "PAYEMS", "CIVPART", "JTSJOL",
+  // Growth / Activity
+  "GDPC1", "INDPRO", "RSAFS", "HOUST",
+  // Policy rate
   "FEDFUNDS",
-  "DGS10",
-  "T10Y2Y",
+  // Treasury yields
+  "DGS1MO", "DGS3MO", "DGS6MO", "DGS1", "DGS2",
+  "DGS5", "DGS7", "DGS10", "DGS20", "DGS30",
+  // Spreads & financial conditions
+  "T10Y2Y", "BAMLH0A0HYM2", "NFCI",
+  // Balance sheet / money
+  "WALCL", "M2SL",
 ];
 
 loadDotEnv(path.join(__dirname, "..", ".env"));
