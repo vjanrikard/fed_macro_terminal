@@ -2,7 +2,7 @@
 
 Interaktivt makroøkonomisk dashboard med data fra FRED (Federal Reserve Economic Data).
 
-Live demo: https://vjanrikard.github.io/macro_terminal_for_fed/
+Live demo: https://vjanrikard.github.io/fed_macro_terminal/
 
 ## Arkitektur
 
@@ -34,6 +34,94 @@ Registrer deg på https://fred.stlouisfed.org/docs/api/api_key.html
 
 ### 4. Push til main
 GitHub Actions bygger automatisk, henter FRED-snapshot og deployer til GitHub Pages.
+
+Hvis du ikke allerede har koblet prosjektet til GitHub, gjør dette én gang lokalt:
+
+```powershell
+cd C:\Users\vevan\OneDrive\GitHub\code\claude\Fed_Macro_Terminal
+git branch -M main
+git remote add origin https://github.com/vjanrikard/fed_macro_terminal.git
+git push -u origin main
+```
+
+Hvis du allerede har laget en lokal commit og bare vil pushe den til GitHub nå:
+
+```powershell
+cd C:\Users\vevan\OneDrive\GitHub\code\claude\Fed_Macro_Terminal
+git branch -M main
+git remote add origin https://github.com/vjanrikard/fed_macro_terminal.git
+git push -u origin main
+```
+
+Hvis `origin` allerede er satt opp, holder det med:
+
+```powershell
+cd C:\Users\vevan\OneDrive\GitHub\code\claude\Fed_Macro_Terminal
+git branch -M main
+git push -u origin main
+```
+
+Når du senere har gjort endringer og vil publisere dem:
+
+```powershell
+cd C:\Users\vevan\OneDrive\GitHub\code\claude\Fed_Macro_Terminal
+git add .
+git commit -m "Beskriv endringen"
+git push
+```
+
+Etter push:
+- GitHub Actions kjører workflowen på `main`
+- snapshot bygges på nytt
+- GitHub Pages oppdateres fra `gh-pages`
+
+Hvis `origin` allerede finnes, bruk kun:
+
+```powershell
+git branch -M main
+git push -u origin main
+```
+
+Hvis push blir avvist fordi GitHub-repoet allerede har innhold:
+
+```powershell
+cd C:\Users\vevan\OneDrive\GitHub\code\claude\Fed_Macro_Terminal
+git branch -M main
+git fetch origin
+git pull origin main --allow-unrelated-histories
+git push -u origin main
+```
+
+Hvis `git pull` lager merge-konflikter:
+- løs konfliktene i filene
+- kjør `git add .`
+- kjør `git commit`
+- kjør `git push`
+
+Unngå `git push --force` med mindre du bevisst vil overskrive det som allerede ligger på GitHub.
+
+### 5. Sjekk GitHub Actions og Pages
+
+Etter at du har kjørt `git push`, kan du sjekke deploy slik:
+
+1. Gå til repoet på GitHub
+2. Åpne fanen `Actions`
+3. Se etter workflowen `Build and Deploy to GitHub Pages`
+4. Vent til workflowen er grønn (`Success`)
+5. Gå deretter til `Settings` → `Pages`
+6. Bekreft at siden publiseres fra `gh-pages`
+
+Hvis workflowen feiler:
+- åpne kjøringen i `Actions`
+- les feilmeldingen i steget som feilet
+- rett feilen lokalt
+- commit og push på nytt
+
+Når deploy er ferdig, skal siden være oppdatert her:
+
+```text
+https://vjanrikard.github.io/fed_macro_terminal/
+```
 
 ## Lokalt
 ```bash
