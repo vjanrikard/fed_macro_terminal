@@ -43,10 +43,16 @@ async function main() {
     series,
   };
 
-  const outputPath = path.join(__dirname, "..", "data", "fred_snapshot.json");
-  fs.mkdirSync(path.dirname(outputPath), { recursive: true });
-  fs.writeFileSync(outputPath, `${JSON.stringify(payload, null, 2)}\n`, "utf8");
-  console.log(`Wrote snapshot to ${outputPath}`);
+  const outputPaths = [
+    path.join(__dirname, "..", "data", "fred_snapshot.json"),
+    path.join(__dirname, "..", "fed_macro_terminal", "data", "fred_snapshot.json"),
+  ];
+
+  for (const outputPath of outputPaths) {
+    fs.mkdirSync(path.dirname(outputPath), { recursive: true });
+    fs.writeFileSync(outputPath, `${JSON.stringify(payload, null, 2)}\n`, "utf8");
+    console.log(`Wrote snapshot to ${outputPath}`);
+  }
 }
 
 async function fetchSeries(seriesId, key) {
