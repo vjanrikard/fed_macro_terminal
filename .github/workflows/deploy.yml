@@ -15,16 +15,16 @@ jobs:
         run: |
           python3 -c "
           key = '${{ secrets.FRED_API_KEY }}'
-          content = open('index.template.html').read()
+          content = open('fed_macro_terminal/index.template.html').read()
           content = content.replace('__FRED_API_KEY__', key)
-          open('index.html', 'w').write(content)
-          print('Done: index.html built')
+          open('fed_macro_terminal/index.html', 'w').write(content)
+          print('Done: fed_macro_terminal/index.html built')
           "
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./
+          publish_dir: ./fed_macro_terminal
           publish_branch: gh-pages
-          exclude_assets: '.env,.env.example,index.template.html,build.sh,.github'
+          exclude_assets: '.env,.env.example,index.template.html,build.sh,.github,.vscode'
