@@ -22,8 +22,17 @@ const envCandidates = [
   path.join(process.cwd(), ".env"),
 ].filter(Boolean);
 
+const envChecks = envCandidates.map((envPath) => ({
+  envPath,
+  exists: fs.existsSync(envPath),
+}));
+
+const loadedEnvFiles = [];
+
 for (const envPath of envCandidates) {
-  loadDotEnv(envPath);
+  if (loadDotEnv(envPath)) {
+    loadedEnvFiles.push(envPath);
+  }
 }
 
 const rawApiKey = process.env.FED_API_KEY || process.env.FRED_API_KEY || "";
@@ -69,7 +78,25 @@ const server = http.createServer(async (req, res) => {
 
 server.listen(PORT, () => {
   console.log(`Macro Terminal server running on http://localhost:${PORT}`);
-  console.log(apiKey ? "Loaded API key from environment/.env" : "No API key found in environment/.env");
+  if (apiKey) {
+    console.log("Loaded API key from environment/.env");
+    return;
+  }
+
+  console.log("No API key found in environment/.env");
+  if (loadedEnvFiles.length) {
+    console.log("Loaded env file(s):");
+    for (const envFile of loadedEnvFiles) {
+      console.log(` - ${envFile}`);
+    }
+  }
+
+  console.log("Checked env paths:");
+  for (const check of envChecks) {
+    console.log(` - ${check.envPath} (${check.exists ? "found" : "missing"})`);
+  }
+
+  console.log('Tip (PowerShell): $env:FED_ENV_FILE = "C:\\path\\to\\fred.env" ; npm start');
 });
 
 function serveStatic(pathname, res) {
@@ -105,7 +132,7 @@ function json(res, status, payload) {
 
 function loadDotEnv(envPath) {
   if (!fs.existsSync(envPath)) {
-    return;
+    return false;
   }
 
   const raw = fs.readFileSync(envPath, "utf8");
@@ -133,6 +160,8 @@ function loadDotEnv(envPath) {
       process.env[key] = value;
     }
   }
+
+  return true;
 }
 
 function isUsableKey(value) {
